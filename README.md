@@ -1,5 +1,9 @@
 # Proyecto01DASH_FLASK
 
+* `El grupo de carpetas del dataset estan en la siguiente ruta`
+- https://drive.google.com/drive/folders/1UPy3Ulwac5Cq_RjvvAhWz1Zbzm0MKKK2
+
+
 Dashboard web desarrollado con Flask para visualizar indicadores operativos de logística y compensaciones. La aplicación permite consultar métricas de guías, piezas, rezagos, confirmaciones, tareas y procesos, además de gestionar usuarios, áreas y permisos por dashboard.
 
 ## Descripción general
