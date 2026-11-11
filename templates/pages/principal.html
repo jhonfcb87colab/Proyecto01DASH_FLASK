@@ -1,0 +1,25 @@
+{% from "_macros.html" import kpi_grid, card_head, table, legend, page_head %}
+{% from "_macros.html" import insights as insights_macro %}
+{% set pie_legend = [] %}
+{% for d in charts.piezas.datasets %}{% set _ = pie_legend.append({'label': d.label, 'color': d.color}) %}{% endfor %}
+{{ page_head(title, subtitle, chip) }}
+{{ kpi_grid(kpis) }}
+<div class="grid">
+  <div class="card span-7">
+    {{ card_head('PESO FÍSICO X NÚMERO DE PIEZAS · REZAGOS', 'Distribución porcentual de guías por cantidad de piezas y régimen', '100% apilado') }}
+    <div class="chart-box lg"><canvas id="chartPiezas"></canvas></div>
+    {{ legend(pie_legend) }}
+  </div>
+  <div class="card span-5">
+    {{ card_head('BODEGAS · UBICACIÓN ÚLTIMO MOVIMIENTO', 'Top 12 bodegas por guías', 'Top 12') }}
+    {{ table(tables.bodegas) }}
+  </div>
+  <div class="card span-5">
+    {{ card_head('ENVÍOS EN COMPENSACIÓN POR REGIONAL', 'Guías con último movimiento en bodega de compensaciones', 'Regional') }}
+    {{ table(tables.regionales) }}
+  </div>
+  <div class="card span-7">
+    {{ card_head('HALLAZGOS DE LA OPERACIÓN', 'Lecturas rápidas del periodo filtrado', 'Insights') }}
+    {{ insights_macro(insights) }}
+  </div>
+</div>

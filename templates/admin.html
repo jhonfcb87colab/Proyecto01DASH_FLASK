@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% from "_icons.html" import icon with context %}
+{% block filter_bar %}{% endblock %}
+{% block breadcrumb %}
+<nav class="breadcrumb" aria-label="Ruta de navegación">
+  <a href="{{ url_for('areas') }}">Áreas</a>
+  <span>/</span>
+  <strong>Administración</strong>
+</nav>
+{% endblock %}
+{% block page_content %}
+<div class="portal-head">
+  <div>
+    <p class="eyebrow">Solo administradores</p>
+    <h2>Administración de usuarios</h2>
+    <p>Crea usuarios y restablece contraseñas de acceso al tablero.</p>
+  </div>
+  <span class="portal-user">{{ icon('shield', 'portal-head-icon') }} {{ CURRENT_USER.username }}</span>
+</div>
+
+<div class="admin-grid">
+  <section class="card admin-card">
+    <div class="admin-card-head">
+      <span class="admin-icon">{{ icon('users') }}</span>
+      <div>
+        <h3>Usuarios registrados</h3>
+        <p>{{ users|length }} cuentas en el tablero</p>
+      </div>
+    </div>
+
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Usuario</th>
+            <th>Rol</th>
+            <th>Estado</th>
+            <th>Último cambio</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in users %}
+          <tr>
+            <td>
+              <div class="admin-user">
+                <span class="user-avatar sm">{{ (user.full_name or user.username)[:2]|upper }}</span>
+                <div>
+                  <strong>{{ user.full_name or user.username }}</strong>
+                  <span>{{ user.username }}</span>
+                </div>
+              </div>
+            </td>
+            <td><span class="pill {{ 'pill-admin' if user.role == 'admin' else '' }}">{{ 'Administrador' if user.role == 'admin' else 'Usuario' }}</span></td>
+            <td><span class="pill {{ 'pill-ok' if user.is_active else 'pill-off' }}">{{ 'Activo' if user.is_active else 'Inactivo' }}</span></td>
+            <td class="admin-date">{{ (user.password_changed_at or user.created_at)[:10] }}</td>
+            <td>
+              <div class="admin-actions">
+                <button class="btn small" type="button" data-toggle-password="pw-{{ user.id }}">{{ icon('key', 'btn-inline-icon') }} Contraseña</button>
+                {% if user.id != CURRENT_USER.id %}
+                <form method="post" action="{{ url_for('admin_toggle_user', user_id=user.id) }}">
+                  <button class="btn small {{ 'danger' if user.is_active else '' }}" type="submit">{{ 'Desactivar' if user.is_active else 'Activar' }}</button>
+                </form>
+                {% endif %}
+              </div>
+              <form class="password-form" id="pw-{{ user.id }}" method="post" action="{{ url_for('admin_change_password', user_id=user.id) }}" hidden>
+                <input type="password" name="password" minlength="6" required placeholder="Nueva contraseña">
+                <input type="password" name="confirm" minlength="6" required placeholder="Confirmar contraseña">
+                <button class="btn small primary" type="submit">Guardar</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="card admin-card">
+    <div class="admin-card-head">
+      <span class="admin-icon">{{ icon('building') }}</span>
+      <div>
+        <h3>Áreas configuradas</h3>
+        <p>Agrupación de dashboards por área</p>
+      </div>
+    </div>
+    <ul class="area-list">
+      {% for area in areas %}
+      <li>
+        <span class="area-dot" style="background: {{ area.color }}"></span>
+        <div>
+          <strong>{{ area.name }}</strong>
+          <span>{{ area.total_dashboards }} dashboards · /{{ area.slug }}</span>
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <section class="card admin-card">
+    <div class="admin-card-head">
+      <span class="admin-icon">{{ icon('shield') }}</span>
+      <div>
+        <h3>Nuevo usuario</h3>
+        <p>Las contraseñas deben tener al menos 6 caracteres</p>
+      </div>
+    </div>
+    <form method="post" action="{{ url_for('admin_create_user') }}" class="admin-form">
+      <label class="field">
+        <span>Usuario</span>
+        <input type="text" name="username" required minlength="3" placeholder="ej. juan.perez" autocomplete="off">
+      </label>
+      <label class="field">
+        <span>Nombre completo</span>
+        <input type="text" name="full_name" placeholder="Nombre y apellido">
+      </label>
+      <label class="field">
+        <span>Contraseña inicial</span>
+        <input type="password" name="password" required minlength="6" placeholder="Mínimo 6 caracteres" autocomplete="new-password">
+      </label>
+      <label class="field">
+        <span>Rol</span>
+        <select name="role">
+          <option value="user">Usuario</option>
+          <option value="admin">Administrador</option>
+        </select>
+      </label>
+      <button class="btn primary" type="submit">{{ icon('users', 'btn-inline-icon') }} Crear usuario</button>
+    </form>
+  </section>
+</div>
+{% endblock %}

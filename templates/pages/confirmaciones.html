@@ -1,0 +1,21 @@
+{% from "_macros.html" import kpi_grid, card_head, table, legend, page_head %}
+{% from "_macros.html" import insights as insights_macro %}
+{% set conf_legend = [] %}
+{% for d in charts.conf.datasets %}{% set _ = conf_legend.append({'label': d.label, 'color': d.color}) %}{% endfor %}
+{{ page_head(title, subtitle, chip) }}
+{{ kpi_grid(kpis) }}
+<div class="grid">
+  <div class="card span-5">
+    {{ card_head('CONFIRMACIONES POR RÉGIMEN Y CANAL', 'Guías sin confirmación vs. total de guías', 'Detalle') }}
+    {{ table(tables.combo) }}
+  </div>
+  <div class="card span-7">
+    {{ card_head('NÚMERO DE CONFIRMACIONES POR RÉGIMEN Y CANAL', 'Piezas confirmadas por tipo de canal', 'Comparativo') }}
+    <div class="chart-box lg"><canvas id="chartConf"></canvas></div>
+    {{ legend(conf_legend) }}
+  </div>
+  <div class="card span-12">
+    {{ card_head('LECTURA DE CONFIRMACIONES', 'Relación entre confirmaciones y volumen de guías', 'Insights') }}
+    {{ insights_macro(insights) }}
+  </div>
+</div>

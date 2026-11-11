@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ APP_NAME }} · Ingresar</title>
+<meta name="description" content="Acceso al Sistema de Visualización de Datos para el análisis de compensaciones, rezagos y tareas.">
+<meta name="theme-color" content="#2563eb">
+<link rel="icon" href="{{ url_for('static', filename='img/HYPERMEGARED.png') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+</head>
+<body class="login-body">
+{% from "_icons.html" import icon with context %}
+<div class="login-shell">
+  <section class="login-brand">
+    <div class="login-brand-top">
+      <img src="{{ url_for('static', filename='img/HYPERMEGARED.png') }}" alt="HYPERMEGARED">
+      <div>
+        <strong>Sistema de Visualización</strong>
+        <span>de Datos</span>
+      </div>
+    </div>
+    <div class="login-brand-copy">
+      <p class="eyebrow">Plataforma corporativa</p>
+      <h1>Sistema de Visualización de Datos</h1>
+      <p>Accede con tu usuario para consultar los tableros de tu área: compensaciones, rezagos y tareas actualizadas desde el modelo MBCORE.</p>
+      <div class="login-points">
+        <div>{{ icon('chart', 'login-point-icon') }}<span>Siete vistas analíticas listas</span></div>
+        <div>{{ icon('shield', 'login-point-icon') }}<span>Acceso por área y rol</span></div>
+        <div>{{ icon('table', 'login-point-icon') }}<span>Reporte descargable en CSV</span></div>
+      </div>
+    </div>
+    <footer class="login-brand-foot">
+      <span class="dot"></span>
+      <span>{{ META.source }} · {{ META.totalGuias|n }} guías</span>
+    </footer>
+  </section>
+
+  <section class="login-panel">
+    <div class="login-card">
+      <div class="login-card-head">
+        <span class="login-badge">{{ icon('key', 'login-badge-icon') }}</span>
+        <h2>Iniciar sesión</h2>
+        <p>Ingresa tus credenciales corporativas.</p>
+      </div>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="flash-stack">
+          {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+        {% endif %}
+      {% endwith %}
+
+      <form method="post" action="{{ url_for('login') }}" class="login-form" autocomplete="on">
+        <input type="hidden" name="next" value="{{ next or '' }}">
+        <label class="field">
+          <span>Usuario</span>
+          <input type="text" name="username" required autofocus autocomplete="username" placeholder="usuario">
+        </label>
+        <label class="field">
+          <span>Contraseña</span>
+          <input type="password" name="password" required autocomplete="current-password" placeholder="••••••••">
+        </label>
+        <button type="submit" class="btn-primary">Entrar al tablero {{ icon('arrow', 'btn-icon') }}</button>
+      </form>
+
+      <p class="login-help">¿Olvidaste tu contraseña? Solicita el restablecimiento al administrador del tablero.</p>
+    </div>
+    <p class="login-copy">{{ APP_NAME }} · Uso interno</p>
+  </section>
+</div>
+</body>
+</html>

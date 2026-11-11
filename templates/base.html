@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ APP_NAME }}{% if title %} · {{ title }}{% endif %}</title>
+<meta name="description" content="Sistema de visualización de datos para el análisis de compensaciones, rezagos y tareas.">
+<meta name="theme-color" content="#2563eb">
+<link rel="icon" href="{{ url_for('static', filename='img/HYPERMEGARED.png') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+</head>
+<body>
+{% from "_icons.html" import icon with context %}
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <img src="{{ url_for('static', filename='img/HYPERMEGARED.png') }}" alt="HYPERMEGARED">
+      <div>
+        <strong>Sistema de Visualización</strong>
+        <span>de Datos</span>
+      </div>
+    </div>
+
+    {% if dashboard_info is defined %}
+    <nav class="sidebar-nav" aria-label="Menú principal">
+      {% for group in NAV %}
+      <div class="nav-section">
+        <p class="nav-section-title">{{ group.section }}</p>
+        {% for item in group.links %}
+        <a class="nav-item {{ 'active' if page == item.id else '' }} {{ 'is-future' if item.future else '' }}"
+           href="{{ url_for('dashboard_page', page=item.id) }}"
+           title="{{ item.label }}" {% if page == item.id %}aria-current="page"{% endif %}>
+          {{ icon(item.icon) }}
+          <span class="nav-label">{{ item.label }}</span>
+          {% if item.badge %}<span class="nav-badge">{{ item.badge }}</span>{% endif %}
+        </a>
+        {% endfor %}
+      </div>
+      {% endfor %}
+    </nav>
+    {% else %}
+    <div class="sidebar-nav sidebar-nav-empty" aria-hidden="true"></div>
+    {% endif %}
+
+    <div class="sidebar-user">
+      <div class="user-avatar">{{ USER_INITIALS }}</div>
+      <div class="user-copy">
+        <strong>{{ CURRENT_USER.full_name or CURRENT_USER.username }}</strong>
+        <span>{{ 'Administrador' if CURRENT_USER.role == 'admin' else 'Usuario' }}</span>
+      </div>
+      <div class="user-links">
+        {% if CURRENT_USER.role == 'admin' %}
+        <a href="{{ url_for('admin_home') }}" title="Panel administrador">{{ icon('settings') }}</a>
+        {% endif %}
+        <a href="{{ url_for('logout') }}" title="Cerrar sesión">{{ icon('logout') }}</a>
+      </div>
+    </div>
+    <div class="sidebar-foot">
+      <span class="dot"></span>
+      <div>
+        <strong>{{ META.source }}</strong>
+        <span>Actualizado {{ META.lastUpdate|fecha }}</span>
+      </div>
+    </div>
+  </aside>
+
+  <div class="app-main">
+    <header class="topbar">
+      <button class="menu-toggle" id="menuToggle" type="button" aria-label="Abrir menú">{{ icon('menu') }}</button>
+      <div class="brand-copy">
+        <h1>{{ APP_NAME }}</h1>
+        <p>{% if title %}{{ title }}{% if subtitle %} · {{ subtitle }}{% endif %}{% else %}{{ subtitle or 'Análisis de compensaciones, rezagos y tareas' }}{% endif %}</p>
+      </div>
+      <div class="header-meta">
+        {% if header %}
+        <div class="header-stats">
+          <div class="header-stat"><span>Guías</span><strong>{{ header.guias }}</strong></div>
+          <div class="header-stat"><span>Piezas</span><strong>{{ header.piezas }}</strong></div>
+          <div class="header-stat"><span>Compensación</span><strong>{{ header.comp }}</strong></div>
+          <div class="header-stat"><span>Rezago</span><strong>{{ header.rez }}</strong></div>
+          <div class="header-stat"><span>Pendientes</span><strong>{{ header.pendientes }}</strong></div>
+        </div>
+        {% endif %}
+        <div class="user-box">
+          <div class="user-avatar">{{ USER_INITIALS }}</div>
+          <div class="user-copy">
+            <strong>{{ CURRENT_USER.full_name or CURRENT_USER.username }}</strong>
+            <span>{{ 'Administrador' if CURRENT_USER.role == 'admin' else 'Usuario' }}</span>
+          </div>
+          <div class="user-links">
+            {% if CURRENT_USER.role == 'admin' %}
+            <a href="{{ url_for('admin_home') }}" title="Panel administrador">{{ icon('settings') }}</a>
+            {% endif %}
+            <a href="{{ url_for('logout') }}" title="Cerrar sesión">{{ icon('logout') }}</a>
+          </div>
+        </div>
+        <div class="update-box">
+          <span>Última actualización</span>
+          <strong>{{ META.lastUpdate|fecha }}</strong>
+        </div>
+      </div>
+    </header>
+
+    {% block filter_bar %}
+    <form class="filter-bar" method="get" action="{{ url_for('dashboard_page', page=page) }}" id="filterForm">
+      <div class="filter-bar-head">{{ icon('filter') }} <span>Filtros globales</span></div>
+      {% if page == 'reporte' and query is defined %}
+      <input type="hidden" name="q" value="{{ query }}">
+      <input type="hidden" name="sort" value="{{ sort }}">
+      <input type="hidden" name="dir" value="{{ dir }}">
+      <input type="hidden" name="size" value="{{ size }}">
+      {% endif %}
+      <div class="filter-fields">
+        <label class="filter-label"><span>Año</span>
+          <select name="year">
+            <option value="all">Todos</option>
+            {% for y in options.years %}
+            <option value="{{ y }}" {{ 'selected' if filters.year == y|string else '' }}>{{ y }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <label class="filter-label"><span>Mes</span>
+          <select name="month">
+            <option value="all">Todos</option>
+            {% for m in options.months %}
+            <option value="{{ m.v }}" {{ 'selected' if filters.month == m.v|string else '' }}>{{ m.l }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <label class="filter-label"><span>Regional</span>
+          <select name="regional">
+            <option value="all">Todas</option>
+            {% for r in options.regionals %}
+            <option value="{{ r }}" {{ 'selected' if filters.regional == r else '' }}>{{ r }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <label class="filter-label"><span>Régimen</span>
+          <select name="regimen">
+            <option value="all">Todos</option>
+            {% for r in options.regimens %}
+            <option value="{{ r }}" {{ 'selected' if filters.regimen == r else '' }}>{{ r }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <label class="filter-label"><span>Canal</span>
+          <select name="canal">
+            <option value="all">Todos</option>
+            {% for c in options.canals %}
+            <option value="{{ c }}" {{ 'selected' if filters.canal == c else '' }}>{{ c }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <label class="filter-label"><span>Bodega</span>
+          <select name="bodega">
+            <option value="all">Todas (top 80)</option>
+            {% for b in options.bodegas %}
+            <option value="{{ b }}" {{ 'selected' if filters.bodega == b else '' }}>{{ b }}</option>
+            {% endfor %}
+          </select>
+        </label>
+      </div>
+      <div class="filter-actions">
+        <a class="btn" href="{{ url_for('dashboard_page', page=page) }}">Limpiar</a>
+        <button class="btn primary" type="submit">Aplicar filtros</button>
+      </div>
+    </form>
+    {% endblock %}
+
+    <main class="content" id="pageContent">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="flash-stack">
+          {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+        {% endif %}
+      {% endwith %}
+      {% block breadcrumb %}
+      {% if area %}
+      <nav class="breadcrumb" aria-label="Ruta de navegación">
+        <a href="{{ url_for('areas') }}">Áreas</a>
+        <span>/</span>
+        <a href="{{ url_for('area_dashboards', area_id=area.id) }}">{{ area.name }}</a>
+        <span>/</span>
+        <strong>{{ dashboard_info.name }}</strong>
+      </nav>
+      {% endif %}
+      {% endblock %}
+      {% block page_content %}
+        {% include page_template %}
+      {% endblock %}
+    </main>
+
+    <footer class="footer">
+      <span><strong>{{ APP_NAME }}</strong> · HYPERMEGARED</span>
+      <span>Fuente: {{ META.totalGuias|n }} guías · {{ META.totalTasks|n }} tareas · datos hasta {{ META.dataMax[:10] }}</span>
+    </footer>
+  </div>
+</div>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<script src="{{ url_for('static', filename='js/chart.umd.js') }}"></script>
+<script>
+  window.DASHBOARD_PAGE = {{ page|tojson }};
+  window.DASHBOARD_CHARTS = {{ (charts_json or {})|tojson }};
+</script>
+<script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

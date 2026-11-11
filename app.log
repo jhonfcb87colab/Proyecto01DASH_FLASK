@@ -1,0 +1,62 @@
+[seguridad] Define SECRET_KEY en el entorno antes de desplegar en producción.
+ * Serving Flask app 'app'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.25.43.217:5000
+Press CTRL+C to quit
+[seguridad] Define SECRET_KEY en el entorno antes de desplegar en producción.
+ * Serving Flask app 'app'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.25.43.217:5000
+Press CTRL+C to quit
+127.0.0.1 - - [23/Oct/2026 11:17:41] "GET /api/health HTTP/1.1" 200 -
+127.0.0.1 - - [23/Oct/2026 11:18:10] "GET /api/health HTTP/1.1" 200 -
+127.0.0.1 - - [23/Oct/2026 11:18:10] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [23/Oct/2026 11:18:41] "GET /api/ HTTP/1.1" 404 -
+127.0.0.1 - - [23/Oct/2026 11:18:45] "GET / HTTP/1.1" 302 -
+127.0.0.1 - - [23/Oct/2026 11:18:45] "GET /login HTTP/1.1" 200 -
+127.0.0.1 - - [23/Oct/2026 11:18:45] "GET /static/css/app.css HTTP/1.1" 200 -
+127.0.0.1 - - [23/Oct/2026 11:18:45] "GET /static/img/HYPERMEGARED.png HTTP/1.1" 200 -
+127.0.0.1 - - [23/Oct/2026 11:18:45] "GET /static/img/HYPERMEGARED.png HTTP/1.1" 304 -
+127.0.0.1 - - [23/Oct/2026 11:19:14] "POST /login HTTP/1.1" 302 -
+127.0.0.1 - - [23/Oct/2026 11:19:14] "GET /areas HTTP/1.1" 200 -
+127.0.0.1 - - [23/Oct/2026 11:19:14] "GET /static/css/app.css HTTP/1.1" 304 -
+127.0.0.1 - - [23/Oct/2026 11:19:14] "GET /static/js/chart.umd.js HTTP/1.1" 200 -
+127.0.0.1 - - [23/Oct/2026 11:19:14] "GET /static/img/HYPERMEGARED.png HTTP/1.1" 304 -
+127.0.0.1 - - [23/Oct/2026 11:19:14] "GET /static/js/charts.js HTTP/1.1" 200 -
+127.0.0.1 - - [23/Oct/2026 11:19:14] "GET /static/js/app.js HTTP/1.1" 200 -
+127.0.0.1 - - [23/Oct/2026 11:19:25] "GET /areas/1 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Oct/2026 11:19:25] "GET /static/css/app.css HTTP/1.1" 304 -
+127.0.0.1 - - [23/Oct/2026 11:19:25] "GET /static/js/chart.umd.js HTTP/1.1" 304 -
+127.0.0.1 - - [23/Oct/2026 11:19:25] "GET /static/img/HYPERMEGARED.png HTTP/1.1" 304 -
+127.0.0.1 - - [23/Oct/2026 11:19:25] "GET /static/js/charts.js HTTP/1.1" 304 -
+127.0.0.1 - - [23/Oct/2026 11:19:25] "GET /static/js/app.js HTTP/1.1" 304 -
+127.0.0.1 - - [23/Oct/2026 11:19:28] "GET /areas/1/dashboards/compensaciones-rezagos/open HTTP/1.1" 302 -
+127.0.0.1 - - [23/Oct/2026 11:19:28] "GET /dashboard/principal HTTP/1.1" 200 -
+127.0.0.1 - - [23/Oct/2026 11:19:28] "GET /static/css/app.css HTTP/1.1" 304 -
+127.0.0.1 - - [23/Oct/2026 11:19:28] "GET /static/img/HYPERMEGARED.png HTTP/1.1" 304 -
+127.0.0.1 - - [23/Oct/2026 11:19:28] "GET /static/js/chart.umd.js HTTP/1.1" 304 -
+127.0.0.1 - - [23/Oct/2026 11:19:28] "GET /static/js/charts.js HTTP/1.1" 304 -
+127.0.0.1 - - [23/Oct/2026 11:19:28] "GET /static/js/app.js HTTP/1.1" 304 -
+[seguridad] Define SECRET_KEY en el entorno antes de desplegar en producción.
+ * Serving Flask app 'app'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.25.43.217:5000
+Press CTRL+C to quit
+127.0.0.1 - - [23/Oct/2026 11:19:45] "GET /logout HTTP/1.1" 302 -
+127.0.0.1 - - [23/Oct/2026 11:19:45] "GET /login HTTP/1.1" 200 -
+127.0.0.1 - - [23/Oct/2026 11:19:45] "GET /static/img/HYPERMEGARED.png HTTP/1.1" 304 -
+127.0.0.1 - - [23/Oct/2026 11:19:45] "GET /static/css/app.css HTTP/1.1" 304 -
+127.0.0.1 - - [23/Oct/2026 11:20:04] "GET /api/health HTTP/1.1" 200 -
+127.0.0.1 - - [23/Oct/2026 11:24:11] "GET /login HTTP/1.1" 200 -
+127.0.0.1 - - [23/Oct/2026 11:24:11] "GET /static/css/app.css HTTP/1.1" 200 -
+127.0.0.1 - - [23/Oct/2026 11:24:11] "GET /static/img/HYPERMEGARED.png HTTP/1.1" 200 -
+127.0.0.1 - - [23/Oct/2026 11:24:11] "GET /static/img/HYPERMEGARED.png HTTP/1.1" 304 -

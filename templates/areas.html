@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% from "_icons.html" import icon with context %}
+{% block filter_bar %}{% endblock %}
+{% block breadcrumb %}{% endblock %}
+{% block page_content %}
+<div class="portal-head">
+  <div>
+    <p class="eyebrow">Espacio de trabajo</p>
+    <h2>Selecciona tu área</h2>
+    <p>Cada área agrupa los dashboards disponibles para tu operación.</p>
+  </div>
+  <span class="portal-user">{{ icon('users', 'portal-head-icon') }} {{ CURRENT_USER.full_name or CURRENT_USER.username }}</span>
+</div>
+
+<div class="area-grid">
+  {% for area in areas %}
+  <a class="area-card" href="{{ url_for('area_dashboards', area_id=area.id) }}" style="--accent: {{ area.color }}">
+    <span class="area-icon">{{ icon(area.icon, 'area-icon-svg') }}</span>
+    <span class="area-badge">{{ area.total_dashboards }} {{ 'dashboard' if area.total_dashboards == 1 else 'dashboards' }}</span>
+    <strong class="area-name">{{ area.name }}</strong>
+    <p class="area-desc">{{ area.description }}</p>
+    <span class="area-open">Entrar al área {{ icon('arrow', 'area-open-icon') }}</span>
+  </a>
+  {% else %}
+  <div class="empty-state">No tienes áreas asignadas. Solicita acceso al administrador.</div>
+  {% endfor %}
+</div>
+{% endblock %}

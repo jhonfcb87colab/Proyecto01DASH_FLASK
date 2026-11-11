@@ -1,0 +1,21 @@
+{% from "_macros.html" import kpi_grid, card_head, table, legend, page_head %}
+{% set div_legend = [] %}
+{% for d in charts.tareasMes.datasets %}{% set _ = div_legend.append({'label': d.label, 'color': d.color}) %}{% endfor %}
+{{ page_head(title, subtitle, chip) }}
+{{ kpi_grid(kpis) }}
+<div class="grid">
+  <div class="card span-8">
+    {{ card_head('PROMEDIO HORAS RESPUESTA', 'Por mes y proceso (selecciona un año para ver meses)' if filters.year != 'all' else 'Por año y proceso (selecciona un año para ver meses)', 'Tiempo') }}
+    <div class="chart-box lg"><canvas id="chartTareasMes"></canvas></div>
+    {{ legend(div_legend) }}
+  </div>
+  <div class="card span-4">
+    {{ card_head('TAREAS PENDIENTES POR REGIONAL', 'Distribución de la carga pendiente', 'Pendientes') }}
+    <div class="chart-box lg"><canvas id="chartTareasPie"></canvas></div>
+  </div>
+  <div class="card span-12">
+    {{ card_head('TABLERO RESUMEN TAREAS', 'Top procesos por cantidad de tareas', 'Detalle') }}
+    {{ table(tables.resumen) }}
+    {% if notes %}<div class="note-line">{{ notes }}</div>{% endif %}
+  </div>
+</div>

@@ -1,0 +1,68 @@
+{% from "_macros.html" import kpi_grid, card_head, page_head %}
+{{ page_head(title, subtitle, chip) }}
+{{ kpi_grid(kpis) }}
+<div class="card">
+  {{ card_head('REPORTE COMPENSACIONES Y REZAGOS', 'Busca por cliente o guía y ordena cualquier columna', 'Detalle') }}
+  <div class="report-toolbar">
+    <form class="report-tools" method="get" action="{{ url_for('dashboard_page', page='reporte') }}">
+      <input type="hidden" name="year" value="{{ filters.year }}">
+      <input type="hidden" name="month" value="{{ filters.month }}">
+      <input type="hidden" name="regional" value="{{ filters.regional }}">
+      <input type="hidden" name="regimen" value="{{ filters.regimen }}">
+      <input type="hidden" name="canal" value="{{ filters.canal }}">
+      <input type="hidden" name="bodega" value="{{ filters.bodega }}">
+      <input type="hidden" name="sort" value="{{ sort }}">
+      <input type="hidden" name="dir" value="{{ dir }}">
+      <input type="search" name="q" placeholder="Buscar cliente o guía..." value="{{ query }}" style="min-width:230px">
+      <select name="size" onchange="this.form.submit()">
+        {% for n in [25, 50, 100] %}
+        <option value="{{ n }}" {{ 'selected' if size == n else '' }}>{{ n }} por página</option>
+        {% endfor %}
+      </select>
+      <button class="btn" type="submit">Buscar</button>
+      <span class="page-info">{{ total|n }} registros</span>
+    </form>
+    <a class="btn primary" href="{{ csv_url }}">Descargar CSV</a>
+  </div>
+
+  <div class="table-wrap tall" style="max-height:560px">
+    <table class="report-table">
+      <thead>
+        <tr>
+          {% for h in headers %}
+          <th class="sortable {{ 'num' if h.kind == 'num' else '' }}">
+            <a href="{{ sort_urls[h.key] }}">{{ h.label }}</a>
+          </th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% if rows %}
+          {% for row in rows %}
+          <tr>
+            {% for cell in row %}
+            <td class="{{ 'num' if headers[loop.index0].kind == 'num' else '' }}">{{ cell|safe }}</td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        {% else %}
+          <tr><td colspan="{{ headers|length }}"><div class="empty">Sin registros para la búsqueda.</div></td></tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pagination">
+    <span class="page-info">Página {{ page_num }} de {{ total_pages }}</span>
+    <a class="page-btn {{ 'disabled' if page_num <= 1 else '' }}" href="{{ prev_url }}">‹</a>
+    {% for p in pages %}
+      {% if p.ellipsis %}
+        <span class="page-info">…</span>
+      {% else %}
+        <a class="page-btn {{ 'active' if p.active else '' }}" href="{{ p.url }}">{{ p.label }}</a>
+      {% endif %}
+    {% endfor %}
+    <a class="page-btn {{ 'disabled' if page_num >= total_pages else '' }}" href="{{ next_url }}">›</a>
+  </div>
+  {% if notes %}<div class="note-line">{{ notes }}</div>{% endif %}
+</div>

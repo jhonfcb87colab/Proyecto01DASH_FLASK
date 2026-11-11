@@ -1,0 +1,21 @@
+{% from "_macros.html" import kpi_grid, card_head, legend, page_head %}
+{% from "_macros.html" import insights as insights_macro %}
+{% set rez_legend = [] %}
+{% for d in charts.rezBar.datasets %}{% set _ = rez_legend.append({'label': d.label, 'color': d.color}) %}{% endfor %}
+{{ page_head(title, subtitle, chip) }}
+{{ kpi_grid(kpis) }}
+<div class="grid">
+  <div class="card span-7">
+    {{ card_head('ENVÍOS EN REZAGOS', 'Evolución mensual de la vejez acumulada en rezagos', 'Serie de tiempo') }}
+    <div class="chart-box lg"><canvas id="chartRezLine"></canvas></div>
+  </div>
+  <div class="card span-5">
+    {{ card_head('PARTICIPACIÓN CANALES', 'Días de vejez por canal y régimen', 'Barras') }}
+    <div class="chart-box lg"><canvas id="chartRezBar"></canvas></div>
+    {{ legend(rez_legend) }}
+  </div>
+  <div class="card span-12">
+    {{ card_head('LECTURA DE REZAGOS', 'Hallazgos del periodo filtrado', 'Insights') }}
+    {{ insights_macro(insights) }}
+  </div>
+</div>

@@ -1,0 +1,21 @@
+{% from "_macros.html" import kpi_grid, card_head, table, legend, page_head %}
+{% from "_macros.html" import insights as insights_macro %}
+{% set bins_legend = [] %}
+{% for d in charts.vejezComp.datasets %}{% set _ = bins_legend.append({'label': d.label, 'color': d.color}) %}{% endfor %}
+{{ page_head(title, subtitle, chip) }}
+{{ kpi_grid(kpis) }}
+<div class="grid">
+  <div class="card span-8">
+    {{ card_head('VEJEZ BODEGA COMPENSACIONES', 'Participación de los rangos de vejez por regional', '100% apilado') }}
+    <div class="chart-box lg"><canvas id="chartVejezComp"></canvas></div>
+    {{ legend(bins_legend) }}
+  </div>
+  <div class="card span-4">
+    {{ card_head('RESUMEN POR REGIONAL', 'Días, guías y participación crítica', 'Ranking') }}
+    {{ table(tables.resumen) }}
+  </div>
+  <div class="card span-12">
+    {{ card_head('OBSERVACIONES', 'La vejez se calcula sobre la duración acumulada en compensaciones', 'Análisis') }}
+    {{ insights_macro(insights) }}
+  </div>
+</div>

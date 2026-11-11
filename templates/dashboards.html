@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% from "_icons.html" import icon with context %}
+{% block filter_bar %}{% endblock %}
+{% block breadcrumb %}
+<nav class="breadcrumb" aria-label="Ruta de navegación">
+  <a href="{{ url_for('areas') }}">Áreas</a>
+  <span>/</span>
+  <strong>{{ area.name }}</strong>
+</nav>
+{% endblock %}
+{% block page_content %}
+<div class="portal-head">
+  <div>
+    <p class="eyebrow">Dashboards del área</p>
+    <h2>{{ area.name }}</h2>
+    <p>{{ area.description }}</p>
+  </div>
+  <a class="btn" href="{{ url_for('areas') }}">Cambiar de área</a>
+</div>
+
+<div class="dash-grid">
+  {% for dashboard in dashboards %}
+  {% if dashboard.is_ready %}
+  <a class="dash-card is-ready" href="{{ url_for('open_dashboard', area_id=area.id, slug=dashboard.slug) }}">
+    <span class="dash-icon">{{ icon(dashboard.icon, 'dash-icon-svg') }}</span>
+    <span class="dash-status ready">Disponible</span>
+    <strong class="dash-name">{{ dashboard.name }}</strong>
+    <p class="dash-desc">{{ dashboard.description }}</p>
+    <span class="dash-open">Abrir dashboard {{ icon('arrow', 'area-open-icon') }}</span>
+  </a>
+  {% else %}
+  <div class="dash-card is-locked">
+    <span class="dash-icon">{{ icon(dashboard.icon, 'dash-icon-svg') }}</span>
+    <span class="dash-status soon">Próximamente</span>
+    <strong class="dash-name">{{ dashboard.name }}</strong>
+    <p class="dash-desc">{{ dashboard.description }}</p>
+    <span class="dash-open">En preparación</span>
+  </div>
+  {% endif %}
+  {% else %}
+  <div class="empty-state">Este área todavía no tiene dashboards configurados.</div>
+  {% endfor %}
+</div>
+{% endblock %}

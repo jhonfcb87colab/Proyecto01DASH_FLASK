@@ -1,0 +1,25 @@
+{% from "_macros.html" import kpi_grid, card_head, table, page_head %}
+{{ page_head(title, subtitle, chip) }}
+{{ kpi_grid(kpis) }}
+<div class="grid">
+  <div class="card span-6">
+    {{ card_head('PROMEDIO DE RESPUESTA TAREAS', 'Tareas y tiempo promedio por mes del año actual', 'Combo') }}
+    <div class="chart-box lg"><canvas id="chartCompMes"></canvas></div>
+  </div>
+  <div class="card span-6">
+    {{ card_head('TAREAS POR AÑO Y MES', 'Promedio de respuesta entre años comparados', 'Comparativo') }}
+    <div class="chart-box lg"><canvas id="chartCompAnual"></canvas></div>
+  </div>
+  <div class="card span-7">
+    {{ card_head('TAREAS POR REGIONAL', 'Guías y tiempo promedio de respuesta del año actual', 'Regional') }}
+    <div class="chart-box md"><canvas id="chartCompRegional"></canvas></div>
+    <div class="legend-inline">
+      <span><i style="background:#2563eb"></i>Guías</span>
+      <span><i style="background:#f59e0b"></i>Promedio respuesta (h)</span>
+    </div>
+  </div>
+  <div class="card span-5">
+    {{ card_head('PROCESOS · AÑO ACTUAL', 'Top procesos por tareas y tiempo de respuesta', 'Tabla') }}
+    {{ table(tables.procesos) }}
+  </div>
+</div>

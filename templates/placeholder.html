@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% from "_macros.html" import page_head %}
+{% from "_icons.html" import icon with context %}
+{% block page_content %}
+{{ page_head(module.title, module.description, 'Módulo en construcción') }}
+<div class="grid">
+  <div class="card span-7">
+    <div class="placeholder-hero">
+      <div class="placeholder-icon">{{ icon(module.icon, 'hero-icon') }}</div>
+      <div>
+        <h3>{{ module.title }}</h3>
+        <p>{{ module.description }}</p>
+        <span class="badge-soft">Disponible en una próxima versión</span>
+      </div>
+    </div>
+    <div class="placeholder-list">
+      <h4>Funcionalidades planificadas</h4>
+      <ul>
+        {% for item in module.planned %}
+        <li><span class="tick">{{ icon('check', 'tick-icon') }}</span>{{ item }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    <a class="btn primary" href="{{ url_for('dashboard_page', page='principal') }}">Volver al tablero</a>
+  </div>
+  <div class="card span-5">
+    <div class="card-head"><div><h3>MÓDULOS FUTUROS</h3><p>Espacios reservados para ampliar el dashboard</p></div></div>
+    <div class="module-list">
+      {% for key, m in MODULES.items() %}
+      <a class="module-item {{ 'active' if key == page else '' }}" href="{{ url_for('dashboard_page', page=key) }}">
+        {{ icon(m.icon, 'nav-icon') }}
+        <div>
+          <strong>{{ m.title }}</strong>
+          <span>{{ m.description }}</span>
+        </div>
+        <span class="nav-badge">Pronto</span>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

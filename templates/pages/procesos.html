@@ -1,0 +1,27 @@
+{% from "_macros.html" import kpi_grid, card_head, table, page_head %}
+{{ page_head(title, subtitle, chip) }}
+{{ kpi_grid(kpis) }}
+<div class="grid">
+  <div class="card span-7">
+    {{ card_head('REGISTROS POR DIVISIÓN', 'Top 15 divisiones de la dimensión de procesos', 'Dimensión') }}
+    <div class="chart-box lg"><canvas id="chartProcesosBar"></canvas></div>
+  </div>
+  <div class="card span-5">
+    {{ card_head('CATÁLOGO DE ESTADOS DE TAREA', 'Cuarta tabla del modelo', 'Estados') }}
+    <div class="table-wrap short">
+      <table>
+        <thead><tr><th>ID_EST_TAREA</th><th>ESTADO_TAREA</th></tr></thead>
+        <tbody>
+          {% for e in estados %}
+          <tr><td class="num">{{ e.id }}</td><td>{{ e.label }}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% if notes %}<div class="note-line">{{ notes }}</div>{% endif %}
+  </div>
+  <div class="card span-12">
+    {{ card_head('DIMENSIÓN DE PROCESOS', 'Registros, guías únicas y tareas asociadas', 'Detalle') }}
+    {{ table(tables.procesos) }}
+  </div>
+</div>

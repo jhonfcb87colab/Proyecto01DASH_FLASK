@@ -1,0 +1,74 @@
+{% macro kpi_grid(kpis) -%}
+<div class="kpi-grid">
+  {% for k in kpis %}
+  <div class="kpi {{ k.tone or '' }}">
+    <span class="kpi-label">{{ k.label }}</span>
+    <strong class="kpi-value">{{ k.value }}</strong>
+    <span class="kpi-sub">{{ k.sub|safe if k.sub else '&nbsp;' }}</span>
+  </div>
+  {% endfor %}
+</div>
+{%- endmacro %}
+
+{% macro card_head(title, sub='', badge='') -%}
+<div class="card-head">
+  <div>
+    <h3>{{ title }}</h3>
+    {% if sub %}<p>{{ sub }}</p>{% endif %}
+  </div>
+  {% if badge %}<span class="card-badge">{{ badge }}</span>{% endif %}
+</div>
+{%- endmacro %}
+
+{% macro table(spec) -%}
+<div class="table-wrap {{ spec.cls or '' }}">
+  {% if spec.rows and spec.rows|length %}
+  <table>
+    <thead>
+      <tr>
+        {% for h in spec.headers %}
+        <th class="{{ 'num' if spec.aligns and spec.aligns[loop.index0] == 'num' else '' }}">{{ h }}</th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in spec.rows %}
+      <tr>
+        {% for cell in row %}
+        <td class="{{ 'num' if spec.aligns and spec.aligns[loop.index0] == 'num' else '' }}">{{ cell|safe }}</td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty">Sin registros para los filtros seleccionados.</div>
+  {% endif %}
+</div>
+{%- endmacro %}
+
+{% macro insights(items) -%}
+<div class="insight-list">
+  {% for it in items %}
+  <div class="insight"><span class="ico">{{ it.icon }}</span><div>{{ it.text|safe }}</div></div>
+  {% endfor %}
+</div>
+{%- endmacro %}
+
+{% macro legend(items) -%}
+<div class="legend-inline">
+  {% for it in items %}
+  <span><i style="background:{{ it.color }}"></i>{{ it.label }}</span>
+  {% endfor %}
+</div>
+{%- endmacro %}
+
+{% macro page_head(title, subtitle, chip) -%}
+<div class="page-head">
+  <div>
+    <h2>{{ title }}</h2>
+    <p>{{ subtitle }}</p>
+  </div>
+  <span class="page-chip"><i></i>{{ chip }}</span>
+</div>
+{%- endmacro %}
